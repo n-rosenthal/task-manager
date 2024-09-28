@@ -1,2 +1,3 @@
 # task-manager
- A simple CRUD aplication for managing tasks
+ A simple CRUD application for managing tasks
+

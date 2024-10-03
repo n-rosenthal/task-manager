@@ -62,10 +62,14 @@ class Task:
         else:
             repr += " - [ ] ";
         
-        repr += f"{self.priority.getUnicode(self.priority)} [{self.name}] {self.description}";
+        try:
+            repr += f"{self.priority.getUnicode(self.priority)} [{self.name}] {self.description}";
+        except AttributeError:
+            print(f"AttributeError: {self.priority}");
+        
         
         if(self.dueDate):
-            return repr + f" {self.CALENDAR_UNICODE} {datetime.strftime(self.dueDate, "%Y-%m-%d")}";
+            return repr + f" {self.CALENDAR_UNICODE} {self.dueDate}";
         return repr;
 
 class RandomTask(Task):

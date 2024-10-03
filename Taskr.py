@@ -1,6 +1,7 @@
 from src.util.nr_fileutil import TaskManagerFileAsserter as FileAsserter;
 from src.TaskContainer import TaskContainer;
 from src.primitives.AppStatus import AppStatus, APP_ERROR, APP_SUCCESS;
+from src.primitives.Task import Task;
 import os;
 import json;
 import logging;
@@ -101,7 +102,7 @@ class TaskrFrontEnd:
                 
         elif(option == 2):
             self.__printAllTasks();
-            option = input(" >  Select index: ");
+            option = int(input(" >  Select index: "));
             
             if(option > 0 and option-1 < len(self.container)):
                 print(self.container[option-1]);
@@ -110,19 +111,64 @@ class TaskrFrontEnd:
             else:
                 print(" >  Invalid index for task");
                 return APP_ERROR
-        else:
-            raise NotImplementedError;
+        
+        
+        #   Insert a new Task
+        elif(option == 3):
+            print();
+            
+            try:
+                task = self.__inputNewTask();
+                self.container.insert(Task(*task));
+            except Exception as e:
+                print(e);
+                return APP_ERROR;
+            return APP_SUCCESS;
+        
+        #   Edit (swap) a class
+        elif(option == 4):
+            #   Print all classes
+            self.__printAllTasks();
+            
+            #   Selects the identifier for the task to be replaced
+            select = input(" >  index: ");            
+            if(select > 0 and select-1 < len(self.container)):
+                prev = self.container.tasks[select];
+                new  = Task(*self.__inputNewTask());
+                self.container.remove(prev);
+                self.container.insert(new);
+                return APP_SUCCESS;
             return APP_ERROR;
             
+        #   Remove a given Task
+        elif(option == 5):
+            self.__printAllTasks();
+            select = input(" >  index: ");  
+            if(select > 0 and select-1 < len(self.container)):
+                self.container.remove(self.container.tasks[select]);
+                return APP_SUCCESS;
+            return APP_ERROR;
+        else:
+            return APP_ERROR;
+        
+    
             
     def __printAllTasks(self) -> None:    
         counter = 1;
             
         for task in self.container.tasks:
             print(f"{counter:4d} \t {task}");
-            
-            
             counter += 1;
+            
+    def __inputNewTask(self) -> tuple[str, str, str, str, str]:
+        name        = input(" > name: ");
+        description = input(" > description: ");
+        completed   = input(" > completed?: ");
+        dueDate     = input(" > due date?: ");
+        priority    = input(" > priority [0-5]: ");
+        
+        return (name, description, completed, dueDate, priority);
+        
 if __name__ == '__main__':
     App = TaskrApp();
     

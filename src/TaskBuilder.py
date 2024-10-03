@@ -18,4 +18,11 @@ class TaskBuilder:
             due_date = due_date.split("-");
             due_date = datetime(int(due_date[0]), int(due_date[1]), int(due_date[2]));
             
-        return Task(name, description, bool(completed), due_date, priority);
+        return Task(name, description, bool(completed), due_date, Priority(int(priority)));
+
+if __name__ == '__main__':
+    TaskBuilder.build("Teste",
+                      "Descrição da Tarefa Teste",
+                      "2",
+                      "2004-07-14",
+                      "False");
